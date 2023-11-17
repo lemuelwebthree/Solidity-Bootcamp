@@ -5,6 +5,7 @@ contract ContractProposal {
 
     // Proposal fields for each proposal
     struct Proposal {
+            string title; // title or name of each proposal for ease of referencing
             string description; // Description of proposal
             uint256 approve; // Number of approve votes
             uint256 reject; // Number of reject votes
