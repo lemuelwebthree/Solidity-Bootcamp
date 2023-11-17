@@ -8,7 +8,7 @@ contract ContractProposal {
 
     // DATA
 
-    // variable to create "admin" fucntionality    
+    // variable to create "admin" fucntionality and store the owner of the contract
     address owner;
 
     // using Counters for Counters.Counter attaches library functions to a 
@@ -37,8 +37,18 @@ contract ContractProposal {
         owner = msg.sender;
     }
 
-    function create(string calldata _title, string calldata _description, uint256 _total_vote_to_end) external {
+    function create(string calldata _title, string calldata _description, uint256 _total_vote_to_end) external onlyOwner {
             _counter.increment();
             proposal_history[_counter.current()] = Proposal(_title,_description, 0, 0, 0, _total_vote_to_end, false, true);
         }
+
+    // ability to change ownership of contract - can only be done by owner
+    function setOwner(address _owner) external onlyOwner {
+        owner = _owner;
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner);
+        _;
+    }
 }
