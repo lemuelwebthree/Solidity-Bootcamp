@@ -15,5 +15,5 @@ contract ContractProposal {
             bool is_active; // This shows if others can vote to our contract
     }
 
-    mapping(uint256 => Proposal) PROPOSAL_HISTORY; // Recordings of previous proposals
+    mapping(uint256 => Proposal) proposal_history; // Recordings of previous proposals
 }

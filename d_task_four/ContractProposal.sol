@@ -6,6 +6,11 @@ import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contr
 
 contract ContractProposal {
 
+    // DATA
+
+    // variable to create "admin" fucntionality    
+    address owner;
+
     // using Counters for Counters.Counter attaches library functions to a 
     // type Counters.Counter private _counter declares a variable of that type
 
@@ -27,6 +32,10 @@ contract ContractProposal {
     mapping(uint256 => Proposal) proposal_history; // Recordings of previous proposals
 
     // Functions
+
+    constructor() {
+        owner = msg.sender;
+    }
 
     function create(string calldata _title, string calldata _description, uint256 _total_vote_to_end) external {
             _counter.increment();
