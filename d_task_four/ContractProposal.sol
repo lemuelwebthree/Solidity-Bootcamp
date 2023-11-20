@@ -68,7 +68,7 @@ contract ContractProposal {
 
     // voting functionality
 
-    function vote(uint8 choice) external {
+    function vote(uint8 choice) external active newVoter(msg.sender) {
         Proposal storage proposal = proposal_history[_counter.current()];
         uint256 total_vote = proposal.approve + proposal.reject + proposal.pass;
 
@@ -91,6 +91,11 @@ contract ContractProposal {
         }
     }
 
+    // We used private because this function is just a helper function 
+    // for our previous vote function and it is only being used in the 
+    // contract.
+-   // We used view because the function only views data from the 
+    // blockchain and does not alter it.
     function calculateCurrentState() private view returns(bool) {
         Proposal storage proposal = proposal_history[_counter.current()];
 
