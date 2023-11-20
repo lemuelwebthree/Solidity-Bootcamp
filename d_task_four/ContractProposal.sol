@@ -8,7 +8,7 @@ contract ContractProposal {
 
     // DATA
 
-    // variable to create "admin" fucntionality and store the owner of the contract
+    // variable to create "admin" functionality and store the owner of the contract
     address owner;
 
     // using Counters for Counters.Counter attaches library functions to a 
@@ -24,17 +24,41 @@ contract ContractProposal {
             uint256 approve; // Number of approve votes
             uint256 reject; // Number of reject votes
             uint256 pass; // NUmber of pass votes
-            uint256 total_vote_end; // When the total votes in the proposal reches this limit, proposal ends
-            bool current_state; // This shows the current state of the propsoal, meaning whether if passes of failes
+            uint256 total_vote_end; // When the total votes in the proposal reaches this limit, proposal ends
+            bool current_state; // This shows the current state of the proposal, meaning whether if passes of failes
             bool is_active; // This shows if others can vote to our contract
     }
 
     mapping(uint256 => Proposal) proposal_history; // Recordings of previous proposals
 
-    // Functions
+    address[] private voted_addresses;
 
+    // constructor
     constructor() {
         owner = msg.sender;
+        voted_addresses.push(msg.sender);
+    }
+
+    modifier onlyOwner() {
+        require(msg.sender == owner);
+        _;
+    }
+
+    modifier active() {
+        require(proposal_history[_counter.current()].is_active == true);
+        _;
+    }
+
+    modifier newVoter(address _address) {
+        require(!isVoted(_address), "Address has not voted yet");
+        _;
+    }
+
+    // EXECUTE FUNCTIONS
+
+    // ability to change ownership of contract - can only be done by owner
+    function setOwner(address _owner) external onlyOwner {
+        owner = _owner;
     }
 
     function create(string calldata _title, string calldata _description, uint256 _total_vote_to_end) external onlyOwner {
@@ -42,16 +66,13 @@ contract ContractProposal {
             proposal_history[_counter.current()] = Proposal(_title,_description, 0, 0, 0, _total_vote_to_end, false, true);
         }
 
-    // ability to change ownership of contract - can only be done by owner
-    function setOwner(address _owner) external onlyOwner {
-        owner = _owner;
-    }
-
-    // voting fucntionality
+    // voting functionality
 
     function vote(uint8 choice) external {
         Proposal storage proposal = proposal_history[_counter.current()];
         uint256 total_vote = proposal.approve + proposal.reject + proposal.pass;
+
+        voted_addresses.push(msg.sender);
 
         if (choice == 1) {
                 proposal.approve += 1;
@@ -64,15 +85,9 @@ contract ContractProposal {
                 proposal.current_state = calculateCurrentState();
         }
 
-        if ((proposal.total_vote_to_end - total_vote == 1) && (choice == 1 || choice 2 || choice == 0 )) {
+        if ((proposal.total_vote_to_end - total_vote == 1) && (choice == 1 || choice == 2 || choice == 0 )) {
                 proposal.is_active = false;
+                voted_addresses = [owner];
         }
-
-    }
-
-
-    modifier onlyOwner() {
-        require(msg.sender == owner);
-        _;
     }
 }
