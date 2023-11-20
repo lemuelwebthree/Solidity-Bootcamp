@@ -94,7 +94,7 @@ contract ContractProposal {
     // We used private because this function is just a helper function 
     // for our previous vote function and it is only being used in the 
     // contract.
--   // We used view because the function only views data from the 
+    // We used view because the function only views data from the 
     // blockchain and does not alter it.
     function calculateCurrentState() private view returns(bool) {
         Proposal storage proposal = proposal_history[_counter.current()];
@@ -114,6 +114,28 @@ contract ContractProposal {
 
 
         if (approve > reject + pass) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // alternative logic to the helper function above
+    function calculateCurrentStateAlternative() private view returns(bool) {
+        Proposal storage proposal = proposal_history[_counter.current()];
+
+        uint256 approve = proposal.approve;
+        uint256 reject = proposal.reject;
+        uint256 pass = proposal.pass;
+
+        // basically asking if proposal.pass is an odd number
+        // if it is then make it even by adding 1 so that it can be divided
+        // by 2
+        if(pass %2 == 1) {
+            pass += 1;
+        }
+
+        if (approve > reject + (pass / 2)) {
             return true;
         } else {
             return false;
