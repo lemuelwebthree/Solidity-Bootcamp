@@ -90,4 +90,28 @@ contract ContractProposal {
                 voted_addresses = [owner];
         }
     }
+
+    function calculateCurrentState() private view returns(bool) {
+        Proposal storage proposal = proposal_history[_counter.current()];
+
+        uint256 approve = proposal.approve;
+        uint256 reject = proposal.reject;
+        uint256 pass = proposal.pass;
+
+        // basically asking if proposal.pass is an odd number
+        // if it is then make it even by adding 1 so that it can be divided
+        // by 2
+        if(proposal.pass %2 == 1) {
+            pass += 1;
+        }
+
+        pass = pass / 2;
+
+
+        if (approve > reject + pass) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
