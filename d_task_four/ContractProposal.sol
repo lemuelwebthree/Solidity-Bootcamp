@@ -141,4 +141,31 @@ contract ContractProposal {
             return false;
         }
     }
+
+    function terminateProposal() external onlyOwner active {
+        proposal_history[_counter.current()].is_active == false;
+    }
+
+    //  QUERY FUNCTIONS
+
+    // Check if given address/user has voted
+    function isVoted(address _address) public view returns (bool) {
+        for (uint i = 0; i < voted_addresses.length ; i ++) {
+            if (voted_address[i] == _address) {
+                return true;
+            }
+        }
+    }
+
+    // getter function to get or retrieve the current proposal
+    // Proposal data is stored on a temporary memory location onchain
+    // It can be deemed as the blockchain's RAM
+    function getCurrentProposal() external view returns (Proposal memory) {
+        return proposal_history[_counter.current()];
+    }
+
+    // a functtion to a specific proposal
+    function getProposal(uint256 number) external view returns (Proposal memory) {
+        return proposal_history[number];
+    }
 }
