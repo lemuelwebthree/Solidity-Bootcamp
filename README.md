@@ -9,5 +9,7 @@ It is a project that gave one a generalistic view into governance.
 
 You can use this smart contract with business partners to vote at Annual General Meeeting.
 
-It can be used in competitions for auditons. The use-case scope is wide.
+It can be used in competitions for auditons. The use-case scope is broad.
+
+[Here is the final smart contract here](https://github.com/lemusosa/Solidity-Bootcamp/tree/main/e_task_final)
 
