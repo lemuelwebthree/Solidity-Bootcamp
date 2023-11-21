@@ -36,6 +36,7 @@ contract ContractProposal {
     // constructor
     constructor() {
         owner = msg.sender;
+        // restrict crator of proposals to vote
         voted_addresses.push(msg.sender);
     }
 
