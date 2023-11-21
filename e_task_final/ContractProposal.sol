@@ -3,7 +3,7 @@ pragma solidity ^0.8.18;
 
 // Import counter library for a better way to tga and track different proposals
 // import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/utils/Counters.sol";
-import "./Counters.sol";
+import "./utils/Counters.sol";
 
 contract ContractProposal {
 
